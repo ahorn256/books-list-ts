@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import BooksContext from "./BooksContext";
 import BooksListItem from "./BooksListItem";
 import './BooksList.css';
+import { FetchError } from "./FetchError";
 
 const BooksList:React.FC = () => {
   const [ books, setBooks ] = useContext(BooksContext);
-  const [ error, setError ] = useState<any>(null); // TODO: How to set type in useState properly?
+  const [ error, setError ] = useState<FetchError|null>(null);
 
   useEffect(() => {
     (async () => {
@@ -13,8 +14,14 @@ const BooksList:React.FC = () => {
         const response = await fetch(`${process.env.REACT_APP_BOOKS_SERVER_URL}`);
         const data = await response.json();
         setBooks(data); // TODO: Data from server is not validated. How to handle data properly?
-      } catch(error:any) { // TODO: How to set error type properly?
-        setError(error);
+      } catch(error) {
+        if (error instanceof Error) {
+          setError({ message: error.message });
+        } else if (typeof error === 'object' && error !== null && 'message' in error) {
+          setError(error as FetchError);
+        } else {
+          setError({ message: 'Unbekannter Fehler' });
+        }
       }
     })()
   }, []);
