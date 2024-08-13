@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+.error {
+  color: rgb(255, 50, 50);
+}
+
+h3,
+h4,
+h5,
+h6 {
+  margin: 2px 0;
+}
+
+p {
+  margin: 5px 0;
+}

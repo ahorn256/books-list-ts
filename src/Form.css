@@ -1,0 +1,11 @@
+form > *:not(last-child) {
+  margin-bottom: 10px;
+}
+
+form label {
+  display: block;
+}
+
+form label span {
+  display: block;
+}
