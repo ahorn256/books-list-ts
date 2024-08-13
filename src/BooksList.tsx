@@ -12,8 +12,23 @@ const BooksList:React.FC = () => {
     (async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_BOOKS_SERVER_URL}`);
-        const data = await response.json();
-        setBooks(data); // TODO: Data from server is not validated. How to handle data properly?
+
+        if(!response.ok) {
+          throw new Error('fetch request failed with: ' + response.status + ' ' + response.statusText);
+        }
+
+        const data:Object[] = await response.json();
+        
+        setBooks(data.map(item => {
+          return {
+            title: 'title' in item ? String(item.title) : '',
+            author: 'author' in item ? String(item.author) : '',
+            isbn: 'isbn' in item ? String(item.isbn) : '',
+            rating: 'rating' in item ? parseInt(String(item.rating)) : 0,
+            id: 'id' in item ? parseInt(String(item.id)) : 0,
+          }
+        })); // TODO: Data from server is not validated. How to handle data properly?
+        setError(null);
       } catch(error) {
         if (error instanceof Error) {
           setError({ message: error.message });
@@ -24,7 +39,7 @@ const BooksList:React.FC = () => {
         }
       }
     })()
-  }, []);
+  }, [setBooks, setError]);
 
   if(error) {
     return (
