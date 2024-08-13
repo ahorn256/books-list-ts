@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Css, Star, StarBorder} from '@mui/icons-material';
+import { Star, StarBorder} from '@mui/icons-material';
 import './Rating.css';
 import { Book } from './Book';
 
